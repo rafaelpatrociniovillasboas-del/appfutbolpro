@@ -25,6 +25,11 @@ export interface FinanceRecord {
   status: 'Pago' | 'Atrasado' | 'Pendente' | 'Pendiente' | 'Atrasado/Pendiente';
 }
 
+// Status is stored as 'Ativo' by the app, but 'Activo' also appears in imported/older data
+export function isActiveStatus(status?: string): boolean {
+  return status === 'Ativo' || status === 'Activo';
+}
+
 export interface Athlete {
   id: number;
   name: string;
@@ -50,12 +55,12 @@ export interface Athlete {
 const DEFAULT_ATHLETES: Athlete[] = [
   {
     id: 1,
-    name: 'João Silva',
+    name: 'Juan Silva',
     category: 'Sub-15',
     age: 14,
-    position: 'Atacante',
+    position: 'Delantero',
     status: 'Ativo',
-    phone: '(11) 99999-1111',
+    phone: '+54 9 11 5555-1111',
     present: true,
     presenceHistory: [
       { date: '10/05/2026', present: true },
@@ -76,8 +81,8 @@ const DEFAULT_ATHLETES: Athlete[] = [
       tackling: 74
     },
     evolution: 12,
-    evolutionComment: 'Melhoria em Finalização nos últimos 30 dias após aplicação de microciclo específico.',
-    attenComment: 'Abaixo da média da categoria em posicionamento tático. Sugerido treinos de rondo posicional.',
+    evolutionComment: 'Mejora en definición en los últimos 30 días tras aplicar un microciclo específico.',
+    attenComment: 'Por debajo del promedio de la categoría en posicionamiento táctico. Se sugieren rondos posicionales.',
     finance: {
       responsible: 'Marcos Silva',
       dueDate: '10/06/2026',
@@ -90,9 +95,9 @@ const DEFAULT_ATHLETES: Athlete[] = [
     name: 'Pedro Santos',
     category: 'Sub-13',
     age: 12,
-    position: 'Meio-campo',
+    position: 'Mediocampista',
     status: 'Ativo',
-    phone: '(11) 99999-2222',
+    phone: '+54 9 11 5555-2222',
     present: false,
     presenceHistory: [
       { date: '10/05/2026', present: true },
@@ -113,8 +118,8 @@ const DEFAULT_ATHLETES: Athlete[] = [
       tackling: 65
     },
     evolution: 8,
-    evolutionComment: 'Grande facilidade na transição ofensiva e passes curtos sob pressão.',
-    attenComment: 'Dificuldades no combate defensivo direto 1v1. Focar em exercícios de temporização.',
+    evolutionComment: 'Gran facilidad en la transición ofensiva y en pases cortos bajo presión.',
+    attenComment: 'Dificultades en el duelo defensivo 1v1. Enfocarse en ejercicios de temporización.',
     finance: {
       responsible: 'Carla Santos',
       dueDate: '10/06/2026',
@@ -124,12 +129,12 @@ const DEFAULT_ATHLETES: Athlete[] = [
   },
   {
     id: 3,
-    name: 'Lucas Oliveira',
+    name: 'Lucas Olivera',
     category: 'Sub-17',
     age: 16,
-    position: 'Zagueiro',
+    position: 'Defensa',
     status: 'Inativo',
-    phone: '(11) 99999-3333',
+    phone: '+54 9 11 5555-3333',
     present: true,
     presenceHistory: [
       { date: '10/05/2026', present: true },
@@ -147,10 +152,10 @@ const DEFAULT_ATHLETES: Athlete[] = [
       tackling: 85
     },
     evolution: 4,
-    evolutionComment: 'Consistente na cobertura defensiva por elevação e cortes diretos.',
-    attenComment: 'Pouco engajamento nos treinos recentes. Atleta atualmente listado como Inativo.',
+    evolutionComment: 'Consistente en la cobertura defensiva, el juego aéreo y los cortes.',
+    attenComment: 'Poca participación en los entrenamientos recientes. Jugador actualmente inactivo.',
     finance: {
-      responsible: 'Roberto Oliveira',
+      responsible: 'Roberto Olivera',
       dueDate: '05/05/2026',
       amount: `${getSettings().currencyCode} 150,00`,
       status: 'Atrasado'
@@ -158,12 +163,12 @@ const DEFAULT_ATHLETES: Athlete[] = [
   },
   {
     id: 4,
-    name: 'Mateus Costa',
+    name: 'Mateo Costa',
     category: 'Sub-15',
     age: 15,
-    position: 'Goleiro',
+    position: 'Portero',
     status: 'Ativo',
-    phone: '(11) 99999-4444',
+    phone: '+54 9 11 5555-4444',
     present: null,
     presenceHistory: [
       { date: '10/05/2026', present: true },
@@ -183,8 +188,8 @@ const DEFAULT_ATHLETES: Athlete[] = [
       tackling: 55
     },
     evolution: 15,
-    evolutionComment: 'Excelentes reflexos e evolução física significativa sob o plano de goleiros do clube.',
-    attenComment: 'Trabalho com os pés e reposição de bola rápida sob pressão.',
+    evolutionComment: 'Excelentes reflejos y una evolución física notable con el plan de porteros del club.',
+    attenComment: 'Juego con los pies y reposición rápida del balón bajo presión.',
     finance: {
       responsible: 'Roberto Costa',
       dueDate: '05/03/2026',
@@ -194,12 +199,12 @@ const DEFAULT_ATHLETES: Athlete[] = [
   },
   {
     id: 5,
-    name: 'Lucas Moura',
+    name: 'Lucas Mora',
     category: 'Sub-15',
     age: 14,
     position: 'Lateral',
     status: 'Ativo',
-    phone: '(11) 99999-5555',
+    phone: '+54 9 11 5555-5555',
     present: true,
     presenceHistory: [
       { date: '10/05/2026', present: true },
@@ -216,10 +221,10 @@ const DEFAULT_ATHLETES: Athlete[] = [
       tackling: 72
     },
     evolution: 6,
-    evolutionComment: 'Boa evolução de condicionamento aeróbico correndo as laterais.',
-    attenComment: 'Refinar passe cruzado na linha de fundo.',
+    evolutionComment: 'Buena evolución de la resistencia aeróbica recorriendo la banda.',
+    attenComment: 'Pulir el centro desde la línea de fondo.',
     finance: {
-      responsible: 'Ana Moura',
+      responsible: 'Ana Mora',
       dueDate: '10/03/2026',
       amount: `${getSettings().currencyCode} 150,00`,
       status: 'Atrasado'
@@ -332,6 +337,23 @@ export function checkAndSyncMonthlyBilling(athletes: Athlete[]): { athletes: Ath
 }
 
 // Helper to validate if an array is a valid Athlete[] list
+// Keys that hold other people lists (leads, personal-training clients, etc.), never athletes
+const NON_ATHLETE_KEYS = [
+  'drillforge_leads_v1',
+  'drillforge_p_clients',
+  'drillforge_p_sessions',
+  'drillforge_comms_history',
+  'drillforge_favorites',
+  'drillforge_marketplace_v1',
+];
+
+// Leads (pipeline stage) and personal-training clients (package) that leaked into athlete lists
+function isNonAthleteRecord(item: any): boolean {
+  if (!item || typeof item !== 'object') return true;
+  if (item.category || item.ratings || item.presenceHistory) return false;
+  return 'stage' in item || 'packageTotal' in item || 'packageRemaining' in item;
+}
+
 function isValidAthleteArray(arr: any): arr is Athlete[] {
   if (!Array.isArray(arr) || arr.length === 0) return false;
   return arr.some(item => item && typeof item === 'object' && typeof item.name === 'string' && item.name.trim().length > 0);
@@ -343,14 +365,14 @@ export function mergeAthleteCollections(primary: Athlete[], incoming: Athlete[])
 
   // Add primary athletes
   for (const a of primary) {
-    if (!a || !a.name) continue;
+    if (!a || !a.name || isNonAthleteRecord(a)) continue;
     const key = a.id ? String(a.id) : a.name.toLowerCase().trim();
     map.set(key, { ...a });
   }
 
   // Merge incoming athletes
   for (const b of incoming) {
-    if (!b || !b.name) continue;
+    if (!b || !b.name || isNonAthleteRecord(b)) continue;
     const key = b.id ? String(b.id) : b.name.toLowerCase().trim();
     const existing = map.get(key);
 
@@ -390,7 +412,7 @@ export function scanAndRecoverAllLocalAthletes(): Athlete[] {
   try {
     for (let i = 0; i < localStorage.length; i++) {
       const k = localStorage.key(i);
-      if (!k) continue;
+      if (!k || NON_ATHLETE_KEYS.some(nk => k === nk || k.startsWith(nk + '_'))) continue;
 
       // Check all keys related to athletes, crm, or generic storage
       if (

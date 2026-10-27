@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Target, Zap, Activity, Save, RefreshCw, Trophy, Award, TrendingUp, Download, User, Flame, Plus, Minus } from 'lucide-react';
 import * as motion from 'motion/react-client';
-import { getAthletes, saveAthletes, Athlete } from '../lib/athleteStore';
+import { getAthletes, saveAthletes, Athlete, isActiveStatus } from '../lib/athleteStore';
 import { useToast } from './Toast';
 import { generateAthleteReportPDF } from '../lib/pdf';
 
@@ -79,8 +79,9 @@ export function EvolutionModule({ inline }: { inline?: boolean }) {
     }
   }, [selectedAthleteId, athletes]);
 
-  const handleSave = () => {
-    if (!selectedAthlete) return;
+  // Saves the values on screen; returns the updated athlete so the PDF always matches what was saved
+  const handleSave = (silent = false): Athlete | null => {
+    if (!selectedAthlete) return null;
     try {
       const updatedList = athletes.map(a => {
         if (a.id === selectedAthleteId) {
@@ -106,10 +107,19 @@ export function EvolutionModule({ inline }: { inline?: boolean }) {
       });
       saveAthletes(updatedList);
       setAthletes(updatedList);
-      addToast(`¡Evolución técnica de ${selectedAthlete.name} guardada con éxito!`, 'success');
+      if (!silent) addToast(`¡Evolución técnica de ${selectedAthlete.name} guardada con éxito!`, 'success');
+      return updatedList.find(a => a.id === selectedAthleteId) || null;
     } catch (e) {
       addToast('Error al guardar evolución.', 'error');
+      return null;
     }
+  };
+
+  const handleExportPDF = (message: string) => {
+    const updated = handleSave(true);
+    if (!updated) return;
+    generateAthleteReportPDF(updated);
+    addToast(message, 'success');
   };
 
   const calculateIMC = () => {
@@ -207,10 +217,7 @@ export function EvolutionModule({ inline }: { inline?: boolean }) {
 
           {selectedAthlete && (
             <button 
-              onClick={() => {
-                generateAthleteReportPDF(selectedAthlete);
-                addToast('¡Ficha del Jugador exportada en PDF!', 'success');
-              }}
+              onClick={() => handleExportPDF('¡Ficha del Jugador exportada en PDF!')}
               title="Generar PDF detallado"
               className="flex items-center gap-2 bg-zinc-900 border border-zinc-855 hover:bg-zinc-800 text-white px-3.5 py-2.5 rounded-xl text-xs font-bold font-sans transition-all"
             >
@@ -219,7 +226,7 @@ export function EvolutionModule({ inline }: { inline?: boolean }) {
           )}
 
           <button 
-            onClick={handleSave} 
+            onClick={() => handleSave()} 
             className="flex items-center gap-2 bg-emerald-500 text-[#050a07] px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-emerald-400 transition-all font-sans"
           >
             <Save className="w-4 h-4" /> Guardar Evolución
@@ -250,10 +257,7 @@ export function EvolutionModule({ inline }: { inline?: boolean }) {
             
             {selectedAthlete && (
               <button 
-                onClick={() => {
-                  generateAthleteReportPDF(selectedAthlete);
-                  addToast('¡Informe Individual PDF generado!', 'success');
-                }}
+                onClick={() => handleExportPDF('¡Informe Individual PDF generado!')}
                 className="bg-zinc-900 hover:bg-zinc-800 text-white border border-zinc-800 px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1 transition-all"
               >
                 <Download className="w-3.5 h-3.5" /> PDF
@@ -261,7 +265,7 @@ export function EvolutionModule({ inline }: { inline?: boolean }) {
             )}
 
             <button 
-              onClick={handleSave} 
+              onClick={() => handleSave()} 
               className="flex items-center justify-center gap-1.5 bg-emerald-500 text-[#050a07] px-4 py-2 rounded-xl text-xs font-bold hover:bg-emerald-400 transition-colors shrink-0"
             >
               <Save className="w-3.5 h-3.5" /> Guardar Cambios
@@ -281,8 +285,19 @@ export function EvolutionModule({ inline }: { inline?: boolean }) {
               <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/5 rounded-full filter blur-xl"></div>
               <div>
                 <span className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold block mb-1">Ficha Biográfica</span>
-                <h3 className="text-xl font-bold text-white flex items-center gap-1.5">{selectedAthlete.name}</h3>
-                <p className="text-xs text-emerald-400 font-bold uppercase tracking-wider mt-0.5">{selectedAthlete.category} • {selectedAthlete.position}</p>
+                <div className="flex items-center gap-3.5">
+                  <div className="w-14 h-14 rounded-full bg-[#0a1810] border-2 border-emerald-500/40 flex items-center justify-center text-lg text-emerald-400 font-extrabold font-mono flex-shrink-0 overflow-hidden">
+                    {selectedAthlete.photo && selectedAthlete.photo.trim() !== '' ? (
+                      <img src={selectedAthlete.photo} alt={selectedAthlete.name} className="w-full h-full object-cover" />
+                    ) : (
+                      selectedAthlete.name.charAt(0)
+                    )}
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-xl font-bold text-white flex items-center gap-1.5">{selectedAthlete.name}</h3>
+                    <p className="text-xs text-emerald-400 font-bold uppercase tracking-wider mt-0.5">{selectedAthlete.category} • {selectedAthlete.position}</p>
+                  </div>
+                </div>
                 
                 <div className="grid grid-cols-2 gap-4 mt-6">
                   <div>
@@ -291,8 +306,8 @@ export function EvolutionModule({ inline }: { inline?: boolean }) {
                   </div>
                   <div>
                     <span className="text-[10px] text-zinc-500 font-bold block">ESTADO</span>
-                    <span className={`text-xs font-bold inline-block px-2 py-0.5 rounded ${selectedAthlete.status === 'Ativo' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
-                      {selectedAthlete.status === 'Ativo' ? 'Activo' : 'Inactivo'}
+                    <span className={`text-xs font-bold inline-block px-2 py-0.5 rounded ${isActiveStatus(selectedAthlete.status) ? 'bg-emerald-500/10 text-emerald-400' : 'bg-rose-500/10 text-rose-400'}`}>
+                      {isActiveStatus(selectedAthlete.status) ? 'Activo' : 'Inactivo'}
                     </span>
                   </div>
                 </div>

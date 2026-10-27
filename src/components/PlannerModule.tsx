@@ -66,10 +66,10 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
     });
   };
 
-  const weekdays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+  const weekdays = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
   const months = [
-    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
   ];
 
   // Load persistence from local storage
@@ -125,7 +125,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
         {
           id: 'seed-1',
           dateStr: formatOffsetDate(0),
-          title: 'Treino Físico Integrado',
+          title: 'Entrenamiento Físico Integrado',
           time: '14:30',
           category: 'Sub-15',
           color: 'emerald'
@@ -133,7 +133,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
         {
           id: 'seed-2',
           dateStr: formatOffsetDate(1),
-          title: 'Organização Tática Reativa',
+          title: 'Organización Táctica Reactiva',
           time: '16:00',
           category: 'Sub-13',
           color: 'indigo'
@@ -141,7 +141,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
         {
           id: 'seed-3',
           dateStr: formatOffsetDate(3),
-          title: 'Treino de Passe & Transição',
+          title: 'Entrenamiento de Pase y Transición',
           time: '19:00',
           category: 'Adulto',
           color: 'amber'
@@ -149,7 +149,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
         {
           id: 'seed-4',
           dateStr: formatOffsetDate(-2),
-          title: 'Foco em Finalização Rápida',
+          title: 'Enfoque en Definición Rápida',
           time: '15:15',
           category: 'Sub-17',
           color: 'rose'
@@ -257,7 +257,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
   const handleAddEventSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!eventTitle.trim()) {
-      addToast('Insira o nome ou selecione um treino!', 'error');
+      addToast('¡Escribe un nombre o selecciona un entrenamiento!', 'error');
       return;
     }
 
@@ -273,7 +273,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
     const updated = [...events, newEvent];
     saveEvents(updated);
     setIsModalOpen(false);
-    addToast('Treino adicionado com sucesso ao calendário!', 'success');
+    addToast('¡Entrenamiento agregado al calendario!', 'success');
   };
 
   const handleDeleteEvent = (id: string, e: React.MouseEvent) => {
@@ -340,9 +340,9 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
     <div className="p-4 sm:p-6 lg:p-10 max-w-7xl mx-auto flex flex-col pb-24 lg:pb-16 h-full overflow-y-auto custom-scrollbar">
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4 shrink-0">
         <div>
-          <h1 className="text-3xl font-display font-bold text-white tracking-tight">Planejador de Treinos</h1>
+          <h1 className="text-3xl font-display font-bold text-white tracking-tight">Planificador de Entrenamientos</h1>
           <p className="text-sm font-medium text-zinc-500 mt-1">
-            Seu calendário de sessões. Clique em qualquer dia para agendar treinos e manter a rotina organizada.
+            Tu calendario de sesiones. Toca cualquier día para programar entrenamientos y mantener la rutina organizada.
           </p>
         </div>
         <button 
@@ -353,7 +353,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
           className="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-black px-4.5 py-2.5 rounded-xl font-bold transition-all text-sm shadow-lg shadow-emerald-500/10 shrink-0 w-full sm:w-auto justify-center"
         >
           <Plus className="w-4 h-4 text-black stroke-[3px]" />
-          Novo Evento de Treino
+          Nuevo Entrenamiento
         </button>
       </header>
 
@@ -361,8 +361,8 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
       <div className="bg-zinc-900/40 border border-zinc-800 rounded-2xl p-4.5 mb-6 flex gap-3 text-xs text-zinc-400 items-start shrink-0">
         <Info className="w-4.5 h-4.5 text-zinc-500 mt-0.5 shrink-0" />
         <div>
-          <strong className="text-zinc-200 block mb-1">Dica de Utilização</strong>
-          Para organizar treinos por categoria, clique diretamente sobre o dia no calendário. Você pode inserir um nome de treino livre ou importar facilmente de sua biblioteca inteligente. Os treinos adicionados ficam salvos diretamente de forma persistente.
+          <strong className="text-zinc-200 block mb-1">Consejo de Uso</strong>
+          Para organizar entrenamientos por categoría, toca directamente el día en el calendario. Puedes escribir un nombre libre o elegir uno de tu biblioteca inteligente. Los entrenamientos agregados quedan guardados automáticamente.
         </div>
       </div>
 
@@ -380,7 +380,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
               <button 
                 onClick={prevMonth} 
                 className="p-1.5 px-3.5 text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-800 transition-colors text-xs font-bold flex items-center gap-1"
-                title="Mês Anterior"
+                title="Mes Anterior"
               >
                 <ChevronLeft className="w-4 h-4"/>
                 Anterior
@@ -389,16 +389,16 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
               <button 
                 onClick={nextMonth} 
                 className="p-1.5 px-3.5 text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-800 transition-colors text-xs font-bold flex items-center gap-1"
-                title="Próximo Mês"
+                title="Mes Siguiente"
               >
-                Próximo
+                Siguiente
                 <ChevronRight className="w-4 h-4"/>
               </button>
             </div>
           </div>
           
           <div className="hidden md:block text-xs text-zinc-500 font-bold bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-1.5 uppercase tracking-wider">
-            Modo Mensal Interativo
+            Vista Mensual Interactiva
           </div>
         </div>
 
@@ -451,7 +451,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
                   
                   {isToday ? (
                     <span className="hidden sm:inline text-[8px] uppercase tracking-wider bg-emerald-400 text-[#050a07] px-1 py-0.5 rounded font-extrabold scale-95 origin-right">
-                      Hoje
+                      Hoy
                     </span>
                   ) : (
                     <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[8px] hidden sm:block bg-zinc-800 text-zinc-400 px-1 py-0.5 rounded font-bold">
@@ -483,7 +483,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
                         {evt.drills && evt.drills.length > 0 && (
                           <div className="hidden sm:flex items-center gap-1 mt-0.5">
                             <span className="text-[8px] text-emerald-400 font-black font-mono uppercase tracking-wider">
-                              ⚡ {evt.drills.length} Exercício{evt.drills.length > 1 ? 's' : ''}
+                              ⚡ {evt.drills.length} Ejercicio{evt.drills.length > 1 ? 's' : ''}
                             </span>
                           </div>
                         )}
@@ -528,10 +528,10 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
           <div>
             <h3 className="text-md sm:text-lg font-bold text-white flex items-center gap-2">
               <Clock className="w-5 h-5 text-emerald-500 shrink-0" />
-              Sessões do Dia: <span className="text-emerald-400 font-mono font-bold">{formatFriendlyDate(selectedDayStr)}</span>
+              Sesiones del Día: <span className="text-emerald-400 font-mono font-bold">{formatFriendlyDate(selectedDayStr)}</span>
             </h3>
             <p className="text-xs text-zinc-500 font-medium mt-0.5">
-              Selecione qualquer dia no calendário acima para gerenciar seus treinos agendados.
+              Selecciona cualquier día del calendario para gestionar tus entrenamientos programados.
             </p>
           </div>
           <button 
@@ -539,7 +539,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
             className="flex items-center gap-1.5 bg-emerald-500 hover:bg-emerald-400 text-black px-4 py-2 rounded-xl font-bold transition-all text-xs sm:text-sm shrink-0 w-full sm:w-auto justify-center"
           >
             <Plus className="w-4 h-4 text-black stroke-[3px]" />
-            Agendar Novo Treino
+            Programar Entrenamiento
           </button>
         </div>
 
@@ -574,17 +574,17 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
                         setConfirmDeleteId(evt.id);
                       }}
                       className="p-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 hover:text-rose-300 rounded-xl border border-rose-500/20 transition-all shrink-0 self-start"
-                      title="Excluir Atividade"
+                      title="Eliminar Actividad"
                     >
                       <Trash2 className="w-4.5 h-4.5" />
                     </button>
                   </div>
 
-                  {/* Dynamic Drills / Exercícios do Treino */}
+                  {/* Dynamic Drills / Ejercicios del Entrenamiento */}
                   {evt.drills && evt.drills.length > 0 && (
                     <div className="mt-2 pt-3.5 border-t border-zinc-800/40 w-full space-y-2">
                       <span className="text-[10px] font-black uppercase text-zinc-400 tracking-wider block">
-                        Exercícios Agendados ({evt.drills.length}):
+                        Ejercicios Programados ({evt.drills.length}):
                       </span>
                       <div className="space-y-1.5">
                         {evt.drills.map((drill: any, dIdx: number) => (
@@ -610,7 +610,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
                               </div>
                             </div>
                             <span className="text-[9.5px] font-bold text-zinc-500 group-hover/drill:text-emerald-400 group-hover/drill:underline shrink-0">
-                              Ver Detalhes →
+                              Ver Detalles →
                             </span>
                           </div>
                         ))}
@@ -623,13 +623,13 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
           </div>
         ) : (
           <div className="text-center py-10 border border-dashed border-zinc-800/40 rounded-2xl bg-zinc-900/10">
-            <p className="text-zinc-400 text-sm font-semibold">Nenhuma sessão programada para este dia.</p>
-            <p className="text-zinc-650 text-zinc-500 text-xs mt-1">Selecione uma data no calendário acima para agendar ou use o botão para começar.</p>
+            <p className="text-zinc-400 text-sm font-semibold">No hay sesiones programadas para este día.</p>
+            <p className="text-zinc-650 text-zinc-500 text-xs mt-1">Selecciona una fecha en el calendario para programar o usa el botón para empezar.</p>
             <button 
               onClick={() => handleOpenAddModal(selectedDayStr)}
               className="mt-3.5 bg-zinc-900 hover:bg-zinc-850 text-white border border-zinc-800 px-4 py-2 rounded-xl text-xs font-bold transition-all"
             >
-              Agendar para {formatFriendlyDate(selectedDayStr)}
+              Programar para el {formatFriendlyDate(selectedDayStr)}
             </button>
           </div>
         )}
@@ -647,10 +647,10 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
               <div>
                 <h3 className="text-md font-bold text-white flex items-center gap-2">
                   <CalendarIcon className="w-4 h-4 text-emerald-500" />
-                  Agendar Sessão de Treino
+                  Programar Sesión de Entrenamiento
                 </h3>
                 <p className="text-[10px] text-zinc-500 font-semibold mt-0.5">
-                  Para o dia: {formatFriendlyDate(selectedDayStr)}
+                  Para el día: {formatFriendlyDate(selectedDayStr)}
                 </p>
               </div>
               <button 
@@ -665,12 +665,12 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
               {/* Title Input (Free-text always) */}
               <div>
                 <label className="block text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-1.5">
-                  Título do Treino / Atividade (Livre)
+                  Título del Entrenamiento / Actividad (Libre)
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="Ex: Saída de Bola de 3 com pivô..."
+                  placeholder="Ej: Salida de balón de 3 con pivote..."
                   value={eventTitle}
                   onChange={(e) => setEventTitle(e.target.value)}
                   className="w-full bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 font-medium"
@@ -681,7 +681,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-1.5">
-                    Horário de Início
+                    Hora de Inicio
                   </label>
                   <input
                     type="time"
@@ -693,7 +693,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
                 </div>
                 <div>
                   <label className="block text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-1.5">
-                    Categoria Alvo
+                    Categoría
                   </label>
                   <select
                     value={eventCategory}
@@ -716,7 +716,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
                     <option>Sub-20</option>
                     <option>Sub-23</option>
                     <option>Adulto</option>
-                    <option>Geral</option>
+                    <option>General</option>
                   </select>
                 </div>
               </div>
@@ -724,15 +724,15 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
               {/* Color Scheme Tag */}
               <div>
                 <label className="block text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-2.5">
-                  Cor da Atividade no Calendário
+                  Color de la Actividad en el Calendario
                 </label>
                 <div className="flex gap-3">
                   {[
                     { id: 'emerald', label: 'Técnico', color: 'bg-emerald-500' },
                     { id: 'blue', label: 'Físico', color: 'bg-blue-500' },
-                    { id: 'amber', label: 'Tático', color: 'bg-amber-500' },
+                    { id: 'amber', label: 'Táctico', color: 'bg-amber-500' },
                     { id: 'rose', label: 'Cardio', color: 'bg-rose-500' },
-                    { id: 'indigo', label: 'Goleiros', color: 'bg-indigo-500' }
+                    { id: 'indigo', label: 'Porteros', color: 'bg-indigo-500' }
                   ].map(item => (
                     <button
                       key={item.id}
@@ -764,7 +764,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
                   type="submit"
                   className="flex-1 py-2.5 px-4 bg-emerald-500 hover:bg-emerald-400 text-black rounded-xl text-xs font-bold transition-colors"
                 >
-                  Confirmar Agendamento
+                  Confirmar
                 </button>
               </div>
             </form>
@@ -785,9 +785,9 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
             </div>
             
             <div className="space-y-2">
-              <h3 className="font-display font-bold text-lg text-white">Desmarcar Treino?</h3>
+              <h3 className="font-display font-bold text-lg text-white">¿Eliminar Entrenamiento?</h3>
               <p className="text-xs text-zinc-400 leading-relaxed font-sans">
-                Você tem certeza que deseja remover esta sessão de treino do planejador? Esta ação pode ser refeita a qualquer momento.
+                ¿Seguro que quieres quitar esta sesión del planificador? Puedes volver a programarla cuando quieras.
               </p>
             </div>
 
@@ -797,7 +797,7 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
                 onClick={() => setConfirmDeleteId(null)}
                 className="flex-1 py-3 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 rounded-xl text-xs font-bold text-zinc-400 hover:text-white transition-all focus:outline-none"
               >
-                Voltar
+                Volver
               </button>
               <button
                 type="button"
@@ -805,12 +805,12 @@ export function PlannerModule({ drills = [] }: PlannerModuleProps) {
                   const id = confirmDeleteId;
                   const filtered = events.filter(evt => evt.id !== id);
                   saveEvents(filtered);
-                  addToast('Treino removido do calendário.', 'info');
+                  addToast('Entrenamiento eliminado del calendario.', 'info');
                   setConfirmDeleteId(null);
                 }}
                 className="flex-1 py-3 bg-rose-600 hover:bg-rose-500 rounded-xl text-xs font-bold text-white transition-all focus:outline-none"
               >
-                Remover
+                Eliminar
               </button>
             </div>
           </motion.div>

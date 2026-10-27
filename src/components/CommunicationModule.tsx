@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Send, Users, MessageSquare, Phone, Mail, CheckCircle2, Trash2, Clock, Check, ExternalLink, X, HelpCircle, Copy, Zap } from 'lucide-react';
 import { useToast } from './Toast';
-import { getAthletes, Athlete } from '../lib/athleteStore';
+import { getAthletes, Athlete, isActiveStatus } from '../lib/athleteStore';
 
 interface CommHistoryItem {
   id: string;
@@ -89,7 +89,7 @@ export function CommunicationModule() {
 
     if (targetGroup === 'Todos los Padres' || targetGroup === 'Todos os Pais') {
       contacts = athletes
-        .filter(a => a.status === 'Ativo')
+        .filter(a => isActiveStatus(a.status))
         .map(a => ({
           name: a.finance?.responsible || `${a.name} (Tutor)`,
           role: `Padre/Madre/Tutor de ${a.name}`,
@@ -105,7 +105,7 @@ export function CommunicationModule() {
     } else {
       // Category match (e.g. Sub-13, Sub-15)
       contacts = athletes
-        .filter(a => a.category === targetGroup && a.status === 'Ativo')
+        .filter(a => a.category === targetGroup && isActiveStatus(a.status))
         .map(a => ({
           name: a.finance?.responsible || `${a.name} (Tutor)`,
           role: `Tutor de ${a.name} (${a.category})`,

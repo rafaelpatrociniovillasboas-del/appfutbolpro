@@ -6,7 +6,7 @@ import { generateAthleteReportPDF } from '../lib/pdf';
 import { AttendanceModule } from './AttendanceModule';
 import { EvolutionModule } from './EvolutionModule';
 import { ReportsModule } from './ReportsModule';
-import { getAthletes, addAthlete, updateAthlete, deleteAthlete, Athlete } from '../lib/athleteStore';
+import { getAthletes, addAthlete, updateAthlete, deleteAthlete, Athlete, isActiveStatus } from '../lib/athleteStore';
 import { compressImageFile } from '../lib/utils';
 import { useSettings } from '../lib/useSettings';
 
@@ -559,10 +559,10 @@ export function CRMModule({ userRole = 'admin' }: { userRole?: 'admin' | 'teache
                       <td className="px-4 py-4 text-zinc-300 hidden md:table-cell">{athlete.position}</td>
                       <td className="px-4 py-4 hidden md:table-cell">
                         <span className={`px-2 py-1 flex items-center gap-1.5 w-fit rounded-full text-[10px] font-bold uppercase tracking-widest ${
-                          athlete.status === 'Ativo' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
+                          isActiveStatus(athlete.status) ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'
                         }`}>
-                          <div className={`w-1.5 h-1.5 rounded-full ${athlete.status === 'Ativo' ? 'bg-emerald-400' : 'bg-rose-400'}`} />
-                          {athlete.status === 'Ativo' ? 'Activo' : 'Inactivo'}
+                          <div className={`w-1.5 h-1.5 rounded-full ${isActiveStatus(athlete.status) ? 'bg-emerald-400' : 'bg-rose-400'}`} />
+                          {isActiveStatus(athlete.status) ? 'Activo' : 'Inactivo'}
                         </span>
                       </td>
                       <td className="px-3 sm:px-4 py-2.5 sm:py-4 text-right">

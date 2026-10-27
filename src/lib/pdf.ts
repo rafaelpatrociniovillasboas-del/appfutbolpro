@@ -3,6 +3,14 @@ import autoTable from 'jspdf-autotable';
 import { logger } from './logger';
 import { LOGO_BASE64 } from './logoData';
 import { getSettings } from './settingsStore';
+import { isActiveStatus } from './athleteStore';
+
+// Finance statuses are stored in Portuguese ('Pago', 'Pendente'); PDFs are read by Spanish-speaking parents
+function financeStatusLabel(status?: string): string {
+  if (status === 'Pago' || status === 'Pagado') return 'Pagado';
+  if (status === 'Atrasado') return 'Atrasado';
+  return 'Pendiente';
+}
 
 // Configuración estándar
 function createPDF(title: string) {
@@ -321,11 +329,11 @@ export async function generateAthleteReportPDF(athlete: any) {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(10);
   doc.setTextColor(0, 0, 0);
-  doc.text(`Estado de Registro: ${athlete.status || 'Activo'}`, 15, startY);
+  doc.text(`Estado de Registro: ${!athlete.status || isActiveStatus(athlete.status) ? 'Activo' : 'Inactivo'}`, 15, startY);
   
   const currencyCode = getSettings().currencyCode;
   const finance = athlete.finance || { status: 'Pagado', amount: `${currencyCode} 150.00` };
-  doc.text(`Estado Financiero CRM: ${finance.status} (${finance.amount})`, 100, startY);
+  doc.text(`Cuota Mensual: ${financeStatusLabel(finance.status)} (${finance.amount})`, 100, startY);
 
   doc.save(`Ficha_${athlete.name.replace(/\s+/g, '_')}.pdf`);
 }
@@ -431,7 +439,7 @@ export function generateCategoryBillingPDF(category: string, athletes: any[]) {
       finance.responsible,
       finance.dueDate,
       finance.amount,
-      finance.status
+      financeStatusLabel(finance.status)
     ];
   });
 

@@ -30,12 +30,12 @@ interface Lead {
 }
 
 const DEFAULT_LEADS: Lead[] = [
-  { id: 'l1', name: 'Alvaro Souza', phone: '(11) 98111-2233', stage: 'interessado', notes: 'Pai quer treinar nas segundas e quartas. Gosta de jogar na Lateral.', source: 'Anúncio Instagram', dateAdded: '03/06/2026' },
-  { id: 'l2', name: 'Rodrigo Mello', phone: '(11) 98122-3344', stage: 'interessado', notes: 'Interessado na categoria Sub-11. Requer avaliação física inicial.', source: 'Indicação Orgânica', dateAdded: '04/06/2026' },
-  { id: 'l3', name: 'Gustavo Santos', phone: '(11) 98133-4455', stage: 'negociacao', notes: 'Fiz a aula experimental e gostou bastante. Conversando sobre pacotes trimestrais.', source: 'Panfleto no Bairro', dateAdded: '01/06/2026' },
-  { id: 'l4', name: 'Henrique Alves', phone: '(11) 98144-5566', stage: 'negociacao', notes: 'Conversei por WhatsApp, enviou o comprovante de residência. Só falta o pagamento.', source: 'Google Maps', dateAdded: '02/06/2026' },
-  { id: 'l5', name: 'Arthur Oliveira', phone: '(11) 98155-6677', stage: 'matriculado', notes: 'Matrícula efetuada com sucesso. Já adicionado ao diretório Sub-15.', source: 'Anúncio Facebook', dateAdded: '30/05/2026' },
-  { id: 'l6', name: 'Davi Ferreira', phone: '(11) 98166-7788', stage: 'matriculado', notes: 'Efetuou matrícula anual. Kit uniforme já entregue.', source: 'Anúncio Instagram', dateAdded: '29/05/2026' }
+  { id: 'l1', name: 'Álvaro Suárez', phone: '+54 9 11 6111-2233', stage: 'interessado', notes: 'El padre quiere lunes y miércoles. Le gusta jugar de lateral.', source: 'Anuncio Instagram', dateAdded: '03/06/2026' },
+  { id: 'l2', name: 'Rodrigo Medina', phone: '+54 9 11 6122-3344', stage: 'interessado', notes: 'Interesado en la categoría Sub-11. Requiere evaluación física inicial.', source: 'Recomendación', dateAdded: '04/06/2026' },
+  { id: 'l3', name: 'Gustavo Santos', phone: '+54 9 11 6133-4455', stage: 'negociacao', notes: 'Hizo la clase de prueba y le gustó mucho. Conversando sobre planes trimestrales.', source: 'Volante en el Barrio', dateAdded: '01/06/2026' },
+  { id: 'l4', name: 'Enrique Álvarez', phone: '+54 9 11 6144-5566', stage: 'negociacao', notes: 'Hablamos por WhatsApp, envió el comprobante de domicilio. Solo falta el pago.', source: 'Google Maps', dateAdded: '02/06/2026' },
+  { id: 'l5', name: 'Arturo Olivera', phone: '+54 9 11 6155-6677', stage: 'matriculado', notes: 'Inscripción realizada. Ya agregado al directorio Sub-15.', source: 'Anuncio Facebook', dateAdded: '30/05/2026' },
+  { id: 'l6', name: 'David Ferreyra', phone: '+54 9 11 6166-7788', stage: 'matriculado', notes: 'Hizo la inscripción anual. Kit de uniforme ya entregado.', source: 'Anuncio Instagram', dateAdded: '29/05/2026' }
 ];
 
 export function LeadsModule() {
