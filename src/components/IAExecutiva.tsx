@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as motion from 'motion/react-client';
 import { Bot, Send, Sparkles, User, BrainCircuit } from 'lucide-react';
 import { getAthletes } from '../lib/athleteStore';
@@ -12,6 +12,15 @@ export function IAExecutiva() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
+
+  // Bring each new message into view: the start of an answer (they can be long), or the question just sent
+  useEffect(() => {
+    const last = messages[messages.length - 1];
+    if (messages.length > 1 && lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: 'smooth', block: last.role === 'assistant' ? 'start' : 'end' });
+    }
+  }, [messages.length]);
 
   const handleSend = async (e?: React.FormEvent, presetInput?: string) => {
     if (e) e.preventDefault();
@@ -111,7 +120,8 @@ export function IAExecutiva() {
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
             key={i} 
-            className={`flex gap-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            ref={i === messages.length - 1 ? lastMessageRef : undefined}
+            className={`flex gap-4 scroll-mt-4 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             {msg.role === 'assistant' && (
               <div className="w-10 h-10 bg-zinc-900 border border-zinc-800 rounded-full flex items-center justify-center shrink-0">
