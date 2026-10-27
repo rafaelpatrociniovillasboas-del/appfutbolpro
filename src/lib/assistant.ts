@@ -1,6 +1,74 @@
 
+// Session proposals by focus; the first one whose keywords appear in the question is used
+const SESSION_PLANS: { keys: string[]; title: string; steps: string[] }[] = [
+  {
+    keys: ['definicion', 'tiro', 'remate', 'gol', 'finaliza'],
+    title: 'SESIÓN DE DEFINICIÓN Y TIRO',
+    steps: [
+      'Activación con balón (10 min): conducción y pase a un toque en parejas, con remate suave al final de cada serie.',
+      'Remate tras control orientado (20 min): pase del compañero, control hacia el arco y remate en dos toques. Alternar pierna hábil y no hábil.',
+      'Definición 1v1 ante el portero (20 min): salida desde mitad de cancha con tiempo límite de 5 segundos para definir.',
+      'Juego reducido 4v4 con mini arcos (20 min): el gol de primera vale doble para premiar la definición rápida.',
+    ],
+  },
+  {
+    keys: ['pase', 'control', 'posesion', 'rondo'],
+    title: 'SESIÓN DE PASE Y CONTROL',
+    steps: [
+      'Rondo 4v1 (10 min): pase a uno o dos toques y desmarque corto.',
+      'Triángulo de pases al primer toque (15 min): perfilarse antes de recibir y cambiar el ritmo del pase.',
+      'Posesión 5v5 con comodines (25 min): diez pases seguidos valen un punto.',
+      'Partido condicionado (20 min): máximo tres toques por jugador.',
+    ],
+  },
+  {
+    keys: ['regate', 'conduccion', '1v1', '1 contra 1', 'drible'],
+    title: 'SESIÓN DE REGATE Y 1 CONTRA 1',
+    steps: [
+      'Conducción en zig-zag con cambios de ritmo (10 min).',
+      'Fintas y salida explosiva ante defensor pasivo (15 min).',
+      'Duelos 1v1 a mini arcos (20 min): ataque de 6 segundos y rotación.',
+      'Juego 3v3 donde superar a un rival en regate suma un punto (25 min).',
+    ],
+  },
+  {
+    keys: ['fisico', 'resistencia', 'velocidad', 'cardio'],
+    title: 'SESIÓN FÍSICA INTEGRADA CON BALÓN',
+    steps: [
+      'Movilidad y activación dinámica (10 min).',
+      'Circuito de velocidad y agilidad con escalera y conos (15 min).',
+      'Juego de transiciones 4v4 en intervalos de 3 minutos (25 min).',
+      'Vuelta a la calma y estiramientos (10 min).',
+    ],
+  },
+  {
+    keys: ['portero', 'arquero'],
+    title: 'SESIÓN ESPECÍFICA DE PORTEROS',
+    steps: [
+      'Activación de manos y reflejos con balones cortos (10 min).',
+      'Blocajes y caídas laterales (15 min).',
+      'Salidas en centros y uno contra uno (20 min).',
+      'Juego con los pies y reposición rápida bajo presión (15 min).',
+    ],
+  },
+];
+const DEFAULT_SESSION_PLAN = {
+  title: 'SESIÓN METODOLÓGICA TÁCTICA Y TÉCNICA',
+  steps: [
+    'Calentamiento Integrado (15 min): Rondo de posesión bajo presión intensa, incentivando agilidad de pase a 1-2 toques, rotación y visión rápida.',
+    'Organización Táctica (25 min): Ejercicio táctico en espacio reducido para salida limpia de balón desde la defensa hacia los mediocentros.',
+    'Partido Reducido y Definición (30 min): Partido 6v6 con remates rápidos de primera, potenciando transiciones ofensivas y finalizaciones en velocidad.',
+  ],
+};
+function pickSessionPlan(msg: string) {
+  return SESSION_PLANS.find(p => p.keys.some(k => msg.includes(k))) || DEFAULT_SESSION_PLAN;
+}
+
 export function generateLocalAssistantResponse(message: string, context?: string): string {
-  const msgLower = (message || '').toLowerCase();
+  // Lowercase without accents, so "pagó", "cuántos" or "definición" match the same as typed without accents
+  const msgLower = (message || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  // Context lists sometimes contain placeholder items such as "-" or ","
+  const isRealItem = (item: string) => item.replace(/[-,|\s]/g, '') !== '';
   
   // Extract real dynamic stats from context if present to deliver ultra-personalized responses
   let activeCount = "40";
@@ -19,7 +87,7 @@ export function generateLocalAssistantResponse(message: string, context?: string
     const lateMatch = context.match(/LISTA DE ALUNOS COM MENSALIDADES ATRASADAS \(FINANCEIRO\):\s*(.*?)(?=\s*ATLETAS PENDENTES|\s*LEAD PIPELINE|\s*TREINOS AGENDADOS|$)/is) ||
                       context.match(/LISTA DE ALUMNOS CON CUOTAS ATRASADAS \(FINANZAS\):\s*(.*?)(?=\s*ALUMNOS PENDIENTES|\s*PIPELINE DE PROSPECCIÓN|\s*ENTRENAMIENTOS PROGRAMADOS|$)/is);
     if (lateMatch && lateMatch[1] && lateMatch[1].trim() !== '' && !lateMatch[1].includes('Nenhum com mensalidade em atraso') && !lateMatch[1].includes('Ninguno con cuota en mora')) {
-      const parsedLate = lateMatch[1].split('|').map(item => item.trim()).filter(Boolean);
+      const parsedLate = lateMatch[1].split('|').map(item => item.trim()).filter(isRealItem);
       if (parsedLate.length > 0) {
         lateListText = parsedLate.map(item => `- ${item}`).join('\n');
         hasOverdue = true;
@@ -29,7 +97,7 @@ export function generateLocalAssistantResponse(message: string, context?: string
     const pendingMatch = context.match(/ATLETAS PENDENTES DE CADASTRO OU MENSALIDADE:\s*(.*?)(?=\s*LEAD PIPELINE|\s*TREINOS AGENDADOS|$)/is) ||
                          context.match(/ALUMNOS PENDIENTES DE REGISTRO O PAGO:\s*(.*?)(?=\s*PIPELINE DE PROSPECCIÓN|\s*ENTRENAMIENTOS PROGRAMADOS|$)/is);
     if (pendingMatch && pendingMatch[1] && pendingMatch[1].trim() !== '' && !pendingMatch[1].includes('Nenhum') && !pendingMatch[1].includes('Ninguno') && pendingMatch[1].trim() !== ',') {
-      const parsedPending = pendingMatch[1].split(',').map(item => item.trim()).filter(Boolean);
+      const parsedPending = pendingMatch[1].split(',').map(item => item.trim()).filter(isRealItem);
       if (parsedPending.length > 0) {
         pendingListText = parsedPending.map(item => `- ${item}`).join('\n');
       }
@@ -38,7 +106,7 @@ export function generateLocalAssistantResponse(message: string, context?: string
     const leadsMatch = context.match(/LEAD PIPELINE ATUAL \(CAPTAÇÃO DE ALUNOS\):\s*(.*?)(?=\s*TREINOS AGENDADOS|$)/is) ||
                        context.match(/PIPELINE DE PROSPECCIÓN ACTUAL \(CAPTACIÓN DE ALUMNOS\):\s*(.*?)(?=\s*ENTRENAMIENTOS PROGRAMADOS|$)/is);
     if (leadsMatch && leadsMatch[1] && leadsMatch[1].trim() !== '' && !leadsMatch[1].includes('Sem leads cadastrados') && !leadsMatch[1].includes('Sin prospectos registrados')) {
-      const parsedLeads = leadsMatch[1].split(',').map(item => item.trim()).filter(Boolean);
+      const parsedLeads = leadsMatch[1].split(',').map(item => item.trim()).filter(isRealItem);
       if (parsedLeads.length > 0) {
         leadsListText = parsedLeads.map(item => `- ${item}`).join('\n');
       }
@@ -47,7 +115,7 @@ export function generateLocalAssistantResponse(message: string, context?: string
     const workoutsMatch = context.match(/TREINOS AGENDADOS \/ PLANEAR INTERATIVO:\s*(.*)/is) ||
                           context.match(/ENTRENAMIENTOS PROGRAMADOS \/ PLANIFICADOR:\s*(.*)/is);
     if (workoutsMatch && workoutsMatch[1] && workoutsMatch[1].trim() !== '' && !workoutsMatch[1].includes('Nenhum treino agendado') && !workoutsMatch[1].includes('Ningún entrenamiento programado')) {
-      const parsedWorkouts = workoutsMatch[1].split('|').map(item => item.trim()).filter(Boolean);
+      const parsedWorkouts = workoutsMatch[1].split('|').map(item => item.trim()).filter(isRealItem);
       if (parsedWorkouts.length > 0) {
         scheduledWorkouts = parsedWorkouts.map(item => `- ${item}`).join('\n');
       }
@@ -56,10 +124,17 @@ export function generateLocalAssistantResponse(message: string, context?: string
 
   // Question routing based on terms
 
+  // HOW MANY PLAYERS
+  if (msgLower.includes('cuantos') && (msgLower.includes('alumno') || msgLower.includes('jugador') || msgLower.includes('atleta'))) {
+    return `Tienes ${activeCount} alumnos activos registrados en FútbolPro.\n\nPuedes ver el detalle por categoría en Gestión de Jugadores o en el Panel Ejecutivo.`;
+  }
+
   // FINANCE & PAYMENTS
   if (
     msgLower.includes('venc') || 
-    msgLower.includes('pago') || 
+    msgLower.includes('pag') || 
+    msgLower.includes('deuda') || 
+    msgLower.includes('atrasad') || 
     msgLower.includes('pagamento') || 
     msgLower.includes('deb') || 
     msgLower.includes('debe') || 
@@ -76,8 +151,10 @@ export function generateLocalAssistantResponse(message: string, context?: string
     resp += `ESTADO DE CUOTAS / MENSUALIDADES ATRASADAS:\n`;
     resp += `${lateListText}\n\n`;
     
-    resp += `JUGADORES CON CRITERIOS PENDIENTES:\n`;
-    resp += `${pendingListText}\n\n`;
+    if (!pendingListText.startsWith('Ningún')) {
+      resp += `JUGADORES CON CUOTA PENDIENTE:\n`;
+      resp += `${pendingListText}\n\n`;
+    }
 
     if (hasOverdue) {
       resp += `CONSEJO DE GESTIÓN DE MANU:\n`;
@@ -99,6 +176,11 @@ export function generateLocalAssistantResponse(message: string, context?: string
     msgLower.includes('táctica') || 
     msgLower.includes('tactica') || 
     msgLower.includes('tiro') || 
+    msgLower.includes('remate') || 
+    msgLower.includes('regate') || 
+    msgLower.includes('portero') || 
+    msgLower.includes('fisico') || 
+    msgLower.includes('sesion') || 
     msgLower.includes('definicion') || 
     msgLower.includes('pase') || 
     msgLower.includes('fundamento') || 
@@ -110,10 +192,12 @@ export function generateLocalAssistantResponse(message: string, context?: string
     resp += `ENTRENAMIENTOS PROGRAMADOS EN EL CALENDARIO:\n`;
     resp += `${scheduledWorkouts}\n\n`;
     
-    resp += `PROPUESTA - SESIÓN METODOLÓGICA TÁCTICA Y TÉCNICA (MANU):\n`;
-    resp += `1. Calentamiento Integrado (15 min): Rondo de posesión bajo presión intensa, incentivando agilidad de pase a 1-2 toques, rotación y visión rápida.\n`;
-    resp += `2. Organización Táctica (25 min): Ejercicio táctico en espacio reducido para salida limpia de balón desde la defensa hacia los mediocentros.\n`;
-    resp += `3. Partido Reducido y Definición (30 min): Partido 6v6 con remates rápidos de primera, potenciando transiciones ofensivas y finalizaciones en velocidad.\n\n`;
+    const plan = pickSessionPlan(msgLower);
+    const categoryMatch = msgLower.match(/sub[\s-]?(\d{1,2})/);
+    const forCategory = categoryMatch ? ` PARA SUB-${categoryMatch[1]}` : '';
+    resp += `PROPUESTA - ${plan.title}${forCategory} (MANU):\n`;
+    plan.steps.forEach((step, i) => { resp += `${i + 1}. ${step}\n`; });
+    resp += `\n`;
     
     resp += `Puedes programar nuevas sesiones directamente en el Planificador de Temporada, seleccionando cualquier día del calendario.`;
     return resp;
