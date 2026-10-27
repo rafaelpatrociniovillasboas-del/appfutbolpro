@@ -30,7 +30,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={{ addToast }}>
       {children}
-      <div className="fixed bottom-4 right-4 z-50 flex flex-col gap-2 pointer-events-none">
+      {/* On mobile, stay above the bottom tab bar (h-20) so toasts never block navigation */}
+      <div className="fixed bottom-24 left-4 right-4 lg:left-auto lg:bottom-4 lg:right-4 z-50 flex flex-col items-end gap-2 pointer-events-none">
         {toasts.map((toast) => (
           <motion.div
             key={toast.id}

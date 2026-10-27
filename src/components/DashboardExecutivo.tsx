@@ -272,6 +272,7 @@ export function DashboardExecutivo({ onNavigate, userRole = 'admin' }: Dashboard
         time: evt.time,
         category: evt.category,
         type: evt.title,
+        fromCalendar: true,
         color: evt.color || 'emerald',
         drills: evt.drills || [],
         athletes: athletes.filter(a => a.category === evt.category).length || 0
@@ -508,7 +509,7 @@ export function DashboardExecutivo({ onNavigate, userRole = 'admin' }: Dashboard
                       </div>
                       <div>
                         <h4 className="font-bold text-white group-hover:text-emerald-400 transition-colors">
-                          {session.type.includes('Treino') || session.type.includes('Entrenamiento') ? session.type : `Entrenamiento Técnico - ${session.category}`}
+                          {(session as any).fromCalendar || session.type.includes('Treino') || session.type.includes('Entrenamiento') ? session.type : `Entrenamiento Técnico - ${session.category}`}
                         </h4>
                         <p className="text-xs text-zinc-400 mt-1">
                           Hoy, {session.time} • <span className="text-emerald-500/85 font-semibold">Campo 1</span>
