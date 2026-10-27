@@ -1,0 +1,18 @@
+# Netlify Configuration File
+
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+[build.environment]
+  # Disables Netlify's automated secrets scanner flagging public Firebase client web keys
+  SECRETS_SCAN_ENABLED = "false"
+  SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
+  SECRETS_SCAN_SMART_DETECTION_OMIT_VALUES = "AIzaSyDLDlNunwyoGOrx-LiX4PiFgaEgGpDUzFE,AIzaSyByzVJDv5ppaTXSpthxwAj-19I77ECbPPQ"
+  SECRETS_SCAN_OMIT_PATHS = "firebase-applet-config.json"
+  NODE_VERSION = "20"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

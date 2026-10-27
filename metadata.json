@@ -1,0 +1,8 @@
+{
+  "name": "FútbolPro",
+  "description": "Plataforma integral de gestión para escuelas de fútbol y entrenamientos de alto rendimiento.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

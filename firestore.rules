@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /drills/{drillId} {
+      allow read, write: if true;
+    }
+
+    match /drills_v2/{drillId} {
+      allow read, write: if true;
+    }
+
+    match /users/{userId} {
+      allow read, write: if true;
+      match /{allChildren=**} {
+        allow read, write: if true;
+      }
+    }
+
+    match /user_backups/{emailDoc} {
+      allow read, write: if true;
+      match /{allChildren=**} {
+        allow read, write: if true;
+      }
+    }
+
+    match /registered_accounts/{accountId} {
+      allow read, write: if true;
+    }
+  }
+}
+
+

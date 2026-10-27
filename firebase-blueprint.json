@@ -1,0 +1,94 @@
+{
+  "entities": {
+    "Drill": {
+      "title": "Drill",
+      "description": "A single soccer drill exercise.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the drill."
+        },
+        "title": {
+          "type": "string",
+          "description": "The title or name of the drill."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of the drill's purpose."
+        },
+        "ageCategory": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of age categories appropriate for this drill."
+        },
+        "difficulty": {
+          "type": "string",
+          "description": "The difficulty level (Iniciante, Intermediário, Avançado)."
+        },
+        "type": {
+          "type": "string",
+          "description": "The type or category of the drill (Aquecimento, Drible, Finalização, Passe, Tática, Físico, Goleiro)."
+        },
+        "durationMinutes": {
+          "type": "number",
+          "description": "Duration of the drill in minutes."
+        },
+        "setup": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of setup steps and required equipment."
+        },
+        "instructions": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of execution instructions."
+        },
+        "coachingPoints": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of coaching pointers and focuses."
+        },
+        "variations": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of variations for the drill."
+        }
+      },
+      "required": ["id", "title", "description", "ageCategory", "difficulty", "type", "durationMinutes", "setup", "instructions", "coachingPoints", "variations"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User account settings and synced application backup.",
+      "type": "object",
+      "properties": {
+        "localStorageBackup": {
+          "type": "object",
+          "description": "User local storage data backup."
+        }
+      }
+    }
+  },
+  "firestore": {
+    "drills/{drillId}": {
+      "schema": { "$ref": "#/entities/Drill" },
+      "description": "Collection containing all soccer drills available in the application."
+    },
+    "drills_v2/{drillId}": {
+      "schema": { "$ref": "#/entities/Drill" },
+      "description": "Version 2 collection containing all soccer drills."
+    },
+    "users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profile document containing synced data."
+    },
+    "user_backups/{emailDoc}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User backup indexed by sanitized email for multi-device cross-login synchronization."
+    },
+    "registered_accounts/{accountId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Registered accounts directory for seamless authentication across devices."
+    }
+  }
+}
